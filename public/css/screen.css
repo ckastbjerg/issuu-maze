@@ -1,0 +1,205 @@
+/* Base styles
+   ========================================================================== */
+
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+body {
+	color: #7b95a5;
+	font-family: 'Lato', sans-serif;
+	font-weight: 100;
+	background: #253139;
+}
+
+input {
+	font-family: 'Lato', sans-serif;
+	font-weight: 100;
+}
+
+img {
+	width: 100%;
+}
+
+
+
+/* Logo (text)
+   ========================================================================== */
+
+.logo {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	font-size: 18px;
+	color: white;
+	opacity: .5;
+	text-shadow: 0 -1px 0px #000;
+}
+
+
+
+/* Top view btn
+   ========================================================================== */
+
+.top-view-btn {
+	color: #f8f8f8;
+	background-color: #151C23;
+	position: absolute;
+	top: 10;
+	right: 10;
+	z-index: 999;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.top-view-btn:hover {
+	background-color: #46BE5E;
+}
+
+
+
+/* Search
+   ========================================================================== */
+
+.search {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: 1s;
+	opacity: 1;
+	visibility: visible;
+	padding: 0 15%;
+	width: 100%;
+	height: 100%;
+
+}
+
+.search.js-hide {
+	opacity: 0;
+	visibility: hidden;
+}
+
+.search__text,
+.search__btn {
+	-webkit-appearance: none;
+	transition: .4s;
+	padding: 15px;
+	font-size: 22px;
+	border: 0;
+	height: 70px;
+	position: relative;
+	top: 50%;
+	margin-top: -35px;
+}
+
+.search__text {
+	color: #495B66;
+	background-color: #1c252b;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	width: 75%;
+}
+
+.search__text:focus {
+	background-color: #fff;
+	outline: none;
+}
+
+.search__btn {
+	color: #f8f8f8;
+	background-color: #46BE5E;
+	width: 25%;
+	cursor: pointer;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.search__btn:focus,
+.search__btn:active {
+	background-color: #888;
+	outline: none;
+}
+
+
+
+/* Container
+   ========================================================================== */
+
+.maze-wrapper {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: calc(-400px/2);
+	margin-top: calc(-400px/2);
+	width: 400px;
+	height: 400px;
+	perspective: 1000px;
+}
+
+
+
+/* Maze
+   ========================================================================== */
+
+.maze {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	transform-style: preserve-3d;
+	transition: transform .5s;
+}
+
+.maze__floor {
+	position: absolute;
+	background-color: #1c252b;
+	transform:
+		rotateX(90deg)
+		translateZ(calc(400px * 2.5))
+		translate3d(0, calc(400px * 2.5), 0);
+}
+
+.maze__wall {
+	background: #f8f8f8;
+	opacity: .9;
+	width: 400px;
+	height: 400px;
+	display: block;
+	position: absolute;
+	overflow: hidden;
+	transition: .3s;
+	border-top: 30px solid transparent;
+	border-right: 60px solid transparent;
+	border-bottom: 30px solid transparent;
+	border-left: 60px solid transparent;
+}
+
+.maze__wall:hover {
+	opacity: 1;
+}
+
+
+
+/* Debugger
+   ========================================================================== */
+
+.debugger {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background-color: black;
+	color: white;
+	opacity: .7;
+	z-index: 999;
+	padding: 5px;
+}
+
+.debugger span {
+	margin-right: 10px;
+}

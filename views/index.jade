@@ -1,0 +1,17 @@
+html
+  head
+    title!= title
+    link(rel="stylesheet", href="css/vendor/reset.css")
+    link(rel="stylesheet", href="css/screen.css")
+    link(href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900', rel='stylesheet', type='text/css')
+  body
+    .logo issuu maze
+    .top-view-btn.js-top-view-btn Top view
+    .search
+      input(class='search__text js-search-text', type="text", placeholder="Enter keywords...")
+      input(class='search__btn js-search-btn', type="button", value="Go!")
+    .maze-wrapper.js-maze-wrapper
+      .maze.js-maze
+        .maze__floor.js-maze-floor
+    script(src="js/vendor/jquery.js")
+    script(src="js/main.js")
