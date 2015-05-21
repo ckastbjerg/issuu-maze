@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "description": "issuu-maze",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+      "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "node": "latest",
-    "express": "4.9.4",
-    "request": "2.44.0"
+      "node": "latest",
+      "jade": "latest",
+      "express": "4.9.4",
+      "request": "2.44.0"
   }
 }
