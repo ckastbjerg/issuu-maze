@@ -17,11 +17,11 @@
         for (var i = map.length - 1; i >= 0; i--) {
             for (var j = 0; j < map[i].length; j++) {
                 var random = Math.floor(Math.random() * 5);
-                if (random == 0) {
+                if (random === 0) {
                     map[i][j] = 0;
                 }
             }
-        };
+        }
 
         var getDocs = function(query) {
             var d = $.Deferred();
@@ -125,8 +125,10 @@
 
         var appendMap = function() {
             for (var i = magz.length - 1; i >= 0; i--) {
-                magz[i].used && appendMag(magz[i]);
-            };
+                if (magz[i].used) {
+                    appendMag(magz[i]);
+                }
+            }
         };
 
         var constructFloor = function() {
@@ -169,7 +171,7 @@
             constructMap: constructMap,
             constructFloor: constructFloor,
             appendMap: appendMap
-        }
+        };
     })();
 
     var z = 0,
