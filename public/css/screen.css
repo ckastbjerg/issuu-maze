@@ -78,6 +78,26 @@ img {
 
 
 
+/* View search btn
+   ========================================================================== */
+
+.search-nav-btn {
+	color: #f8f8f8;
+	background-color: #151C23;
+	position: absolute;
+	bottom: 10;
+	right: 10;
+	z-index: 999;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.search-nav-btn:hover {
+	background-color: #46BE5E;
+}
+
+
+
 /* Search
    ========================================================================== */
 
@@ -85,13 +105,24 @@ img {
 	position: absolute;
 	top: 0;
 	left: 0;
-	transition: 1s;
-	opacity: 1;
+	transition: .5s;
+	opacity: .85;
 	visibility: visible;
 	padding: 0 15%;
 	width: 100%;
 	height: 100%;
 	z-index: 999;
+
+}
+
+.search:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #253139;
+	width: 100%;
+	height: 100%;
 }
 
 .search.js-hide {

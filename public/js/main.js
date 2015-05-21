@@ -1,6 +1,8 @@
 (function($) {
     var UNIT = 400;
-
+    var quality = '_thumb_large';
+    var onAnimationEnd = 'webkitAnimationEnd oanimationend msAnimationEnd animationend';
+    var onTransitionEnd = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend';
     var magz = [];
 
     var map = [
@@ -37,12 +39,13 @@
     };
 
     var constructDocs = function(docs) {
+        magz = [];
         for (var i in docs) {
             var doc = docs[i];
 
             doc.id = magz.length;
             doc.link = 'http://issuu.com/' + doc.username + '/docs/' + doc.docname;
-            doc.imageSrc = 'http://image.issuu.com/' + doc.documentId + '/jpg/page_1.jpg';
+            doc.imageSrc = 'http://image.issuu.com/' + doc.documentId + '/jpg/page_1' + quality + '.jpg';
 
             magz.push(doc);
         }
@@ -269,7 +272,7 @@
         var imgSrc = $img.attr('src'),
             currentPageNum = imgSrc.split('page_')[1].split('.')[0],
             nextPageNum = parseInt(currentPageNum) + 1,
-            nextImgSrc = imgSrc.replace('page_' + currentPageNum, 'page_' + nextPageNum);
+            nextImgSrc = imgSrc.replace('page_' + currentPageNum, 'page_' + nextPageNum + quality);
 
         return nextImgSrc;
     }
@@ -286,29 +289,40 @@
     }
 
     $('body').on('keydown', function(e) {
-        setRotation(e.keyCode);
-        setDirection(e.keyCode);
-        move(e.keyCode, dir);
-        setXOffsetAdjustment(dir);
-        setZOffsetAdjustment(dir);
+        switch (e.keyCode) {
+            case 83: // s
+                $('.js-search-nav-btn').click();
+                break;
+            case 84: // s
+                $('.js-top-view-btn').click();
+                break;
+        }
 
-        var tempX = x + xOffsetAdjustment;
-        var tempZ = z + zOffsetAdjustment;
+        if ($('.search').hasClass('js-hide')) {
+            setRotation(e.keyCode);
+            setDirection(e.keyCode);
+            move(e.keyCode, dir);
+            setXOffsetAdjustment(dir);
+            setZOffsetAdjustment(dir);
 
-        var debug = '<div class="debugger js-debugger">' +
-            '<span>dir: ' + dir + '</span>' +
-            '<span>z: ' + z + '</span>' +
-            '<span>x: ' + x + '</span>' +
-            '<span>rotation: ' + rotation + '</span>' +
-            '<span>dirOffset: ' + dirOffset + '</span>' +
-            '</div>';
+            var tempX = x + xOffsetAdjustment;
+            var tempZ = z + zOffsetAdjustment;
 
-        $('.js-debugger').remove();
-        $('body').append(debug);
+            var debug = '<div class="debugger js-debugger">' +
+                '<span>dir: ' + dir + '</span>' +
+                '<span>z: ' + z + '</span>' +
+                '<span>x: ' + x + '</span>' +
+                '<span>rotation: ' + rotation + '</span>' +
+                '<span>dirOffset: ' + dirOffset + '</span>' +
+                '</div>';
 
-        readFadeOut();
+            $('.js-debugger').remove();
+            $('body').append(debug);
 
-        $('.js-maze').css('transform', 'rotateY(' + rotation + 'deg) translate3d(' + tempX + 'px, 0, ' + tempZ + 'px)');
+            readFadeOut();
+
+            $('.js-maze').css('transform', 'rotateY(' + rotation + 'deg) translate3d(' + tempX + 'px, 0, ' + tempZ + 'px)');
+        }
     });
 
     $('body').on('mouseenter', '.js-document-cover', function(e) {
@@ -329,7 +343,7 @@
         $newImg.on('load', function() {
 
             $newImg.addClass('js-animate-in');
-            $newImg.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
+            $newImg.one(onAnimationEnd, function(e) {
                 preloadImage($newImg);
                 $newImg.removeClass('js-animate-in');
                 $newImg.addClass('js-current-page');
@@ -343,6 +357,8 @@
 
         var title = $('.js-search-text').val();
 
+        $('.js-maze').empty();
+
         getDocs('title:' + title + '&sortBy=views&language=en').then(function(docs) {
             return docs;
         }).then(function(docs) {
@@ -355,5 +371,21 @@
         $('.search').addClass('js-hide');
     });
 
+    $('.js-search-nav-btn').on('click', function(e) {
+        $('.search.js-hide').removeClass('js-hide');
+        $('.search').one(onTransitionEnd, function(e) {
+            console.log('testsretsetet');
+            $('.js-search-text').focus();
+        });
+    });
+
+    $('.js-search-text').keyup(function(e) {
+        if (e.keyCode == 13) {
+            $(".js-search-btn").click();
+        }
+    });
+
+    // $('.js-search-text').val('games');
+    // $('.js-search-btn').click();
 
 })(jQuery);
