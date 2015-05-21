@@ -18,6 +18,7 @@ Builds are stupid...
 ## Todo
 
 Hackday goals:
+- [ ] Deploy on heroku
 - [x] Beautify code
 - [x] Add takana
 - [x] Create custom 3d reader (load individual pages when document cover is clicked)
