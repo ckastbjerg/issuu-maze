@@ -25,6 +25,24 @@ app.get('/query', function(req, res) {
     });
 });
 
+app.get('/interests', function(req, res) {
+    request('http://api.issuu.com/call/interests/list?lang=en', function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            res.send(body);
+        }
+    });
+});
+
+//http://api.issuu.com/call/stream/api/iosinterest/1/0/initial?interestIds=105&seed=42&pageSize=10
+app.get('/iosinterest', function(req, res) {
+    var iosinterest = req.url.split('/iosinterest?q=')[1];
+    request('http://api.issuu.com/call/stream/api/iosinterest/1/0/initial?interestIds=' + iosinterest + '&seed=42&pageSize=50', function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            res.send(body);
+        }
+    });
+});
+
 var server = app.listen(3000, function() {
     console.log('Listening on port %d', server.address().port);
 });

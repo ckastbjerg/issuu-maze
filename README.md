@@ -19,16 +19,22 @@ Builds are stupid...
 
 Hackday goals:
 - [ ] Deploy on heroku
+- [ ] cue up clicks for reader to enhance experience...
+- [ ] Add dropdown with example layouts for the maze
 - [x] Beautify code
 - [x] Add takana
 - [x] Create custom 3d reader (load individual pages when document cover is clicked)
 - [x] Allow multiple searches (without reloading)
-- [ ] cue up clicks for reader to enhance experience...
-- [ ] Have documents transition in when search is performed (like in "The Matrix" weapon scene!)
+- [x] Have documents transition in when search is performed (like in "The Matrix" weapon scene!)
+- [x] Fix covers/pages being inverted
+- [x] Add dropdown for selecting by interests (Mortens data)
+    example:
+    http://api.issuu.com/call/interests/list?lang=en
+    http://api.issuu.com/call/stream/api/iosinterest/1/0/initial?interestIds=105&seed=42&pageSize=10
+
 
 Nice to have:
 - [ ] Create overlay when hovering document cover to display some metadata
-- [ ] Fix covers/pages being inverted
 - [ ] Add prefixing
 - [ ] Improove rotation (currently walls gets in the way)
 - [ ] Don't allow walking through walls

@@ -5,24 +5,7 @@
     var onTransitionEnd = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend';
     var magz = [];
 
-    var map = [
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1]
-    ];
-
-    for (var i = map.length - 1; i >= 0; i--) {
-        for (var j = 0; j < map[i].length; j++) {
-            var random = Math.floor(Math.random() * 5);
-            if (random === 0) {
-                map[i][j] = 0;
-            }
-        }
-    }
+    var map;
 
     var getDocs = function(query) {
         var d = $.Deferred();
@@ -51,12 +34,67 @@
         }
     };
 
+    var constructInterestsDocs = function(docs) {
+        magz = [];
+        for (var i in docs) {
+            var doc = docs[i].content;
+            var id = doc.revisionId + '-' + doc.publicationId;
+
+            doc.id = magz.length;
+            doc.link = 'http://issuu.com/' + doc.ownerUsername + '/docs/' + doc.publicationName;
+            doc.imageSrc = 'http://image.issuu.com/' + id + '/jpg/page_1' + quality + '.jpg';
+
+            magz.push(doc);
+        }
+    };
+
+    function getMapArray(width, height) {
+        var arr = [];
+
+        for (var i = 0; i < width; i++) {
+            arr.push([]);
+
+            for (var j = 0; j < height; j++) {
+                arr[i].push(1);
+            }
+        }
+
+        return arr;
+    }
+
+    function generateMap(type) {
+        if (type === 'hallway') {
+            map = getMapArray(20, 1);
+        } else if (type === 'emptyroom') {
+            map = getMapArray(6, 6);
+        } else if (type === 'designed') {
+            map = [
+                [1, 1, 1, 1, 1, 1, 1, 0],
+                [1, 1, 0, 0, 0, 1, 1, 1],
+                [1, 1, 1, 1, 0, 1, 1, 1],
+                [1, 1, 0, 1, 1, 1, 0, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1],
+            ];
+        } else {
+            map = getMapArray(6, 6);
+
+            for (var i = map.length - 1; i >= 0; i--) {
+                for (var j = 0; j < map[i].length; j++) {
+                    var random = Math.floor(Math.random() * 5);
+                    if (random === 0) {
+                        map[i][j] = 0;
+                    }
+                }
+            }
+        }
+    }
+
     // translate is the horizontal position
     // translateZ is the depth/vertical position
     // rotateY is the flip/rotation amount
+    var numMagz;
     var constructMap = function() {
-        var numMagz = 0,
-            numTexts = 0;
+        numMagz = 0;
         var rows = map.length - 1;
 
         for (var i = 0; i < map.length; i++) {
@@ -76,29 +114,31 @@
                     bottomNeighbor = nextRow ? nextRow[j] : undefined;
 
                 if (!topNeighbor) {
-                    mag = getMag(numMagz);
+                    mag = getMag();
                     mag.used = true;
                     mag.translate = j * UNIT;
                     mag.translateZ = i * UNIT - UNIT;
+                    mag.rotateY = 0;
                     numMagz++;
                 }
                 if (!bottomNeighbor) {
-                    mag = getMag(numMagz);
+                    mag = getMag();
                     mag.used = true;
                     mag.translate = j * UNIT;
                     mag.translateZ = i * UNIT;
+                    mag.rotateY = 180;
                     numMagz++;
                 }
                 if (!leftNeighbor) {
-                    mag = getMag(numMagz);
+                    mag = getMag();
                     mag.used = true;
                     mag.translate = j * UNIT - UNIT / 2;
                     mag.translateZ = i * UNIT - UNIT / 2;
-                    mag.rotateY = -90;
+                    mag.rotateY = 90;
                     numMagz++;
                 }
                 if (!rightNeighbor) {
-                    mag = getMag(numMagz);
+                    mag = getMag();
                     mag.used = true;
                     mag.translate = j * UNIT + UNIT / 2;
                     mag.translateZ = i * UNIT - UNIT / 2;
@@ -109,7 +149,7 @@
         }
     };
 
-    var getMag = function(numMagz) {
+    var getMag = function() {
         var mag = magz[numMagz];
 
         if (mag !== undefined) {
@@ -127,6 +167,7 @@
 
     var appendMap = function() {
         for (var i = magz.length - 1; i >= 0; i--) {
+            console.log(magz[i].used);
             if (magz[i].used) {
                 appendDocument(magz[i]);
             }
@@ -134,13 +175,11 @@
     };
 
     var constructFloor = function() {
-        var height = map.length;
-        var width = map[0].length;
-
-        $('.js-maze-floor').css({
-            height: height * UNIT,
-            width: width * UNIT
+        var $floor = $('<div class="maze__floor js-maze-floor">').css({
+            height: map.length * UNIT,
+            width: map[0].length * UNIT
         });
+        $floor.appendTo($('.js-maze'));
     };
 
     var appendDocument = function(doc) {
@@ -149,10 +188,33 @@
             rotateY = doc.rotateY ? ' rotateY(' + doc.rotateY + 'deg)' : '',
             scale = 'scale(1)';
 
+        var tempTranslate = translate,
+            tempTranslateZ = translateZ;
+        switch (doc.rotateY) {
+            case 0:
+                tempTranslateZ = ' translateZ(' + (doc.translateZ - 100) + 'px)';
+                break;
+            case -90:
+                tempTranslate = ' translate(' + (doc.translate + 100) + 'px, 0)';
+                break;
+            case 90:
+                tempTranslate = ' translate(' + (doc.translate - 100) + 'px, 0)';
+                break;
+            case 180:
+                tempTranslateZ = ' translateZ(' + (doc.translateZ + 10000) + 'px)';
+                break;
+        }
+
         var $link = $('<a class="maze__wall js-document-cover" data-docId="' + doc.id + '" class="side-' + doc.id + '" href="' + doc.link + '"></a>');
-        $link.css('transform', translate + translateZ + rotateY + scale);
+        $link.css('transform', tempTranslate + tempTranslateZ + rotateY + scale);
 
         var $img = $('<img src="' + doc.imageSrc + '" />');
+
+        setTimeout(function() {
+            $link.addClass('js-show').css({
+                'transform': translate + translateZ + rotateY + scale
+            });
+        }, 1 + (Math.random() * 1000));
 
         $img.appendTo($link);
         $link.appendTo($('.js-maze'));
@@ -162,6 +224,7 @@
         var mag = magz[$(this).attr('data-magId')];
     });
 
+    // Trigger a bird view
     $('.js-top-view-btn').on('click', function() {
         var center = (map.length * UNIT) / 2;
         var z = center - UNIT;
@@ -293,12 +356,20 @@
             case 83: // s
                 $('.js-search-nav-btn').click();
                 break;
-            case 84: // s
+            case 84: // t
                 $('.js-top-view-btn').click();
+                break;
+            case 76: // t
+                $('body').toggleClass('js-god-mode');
+                $('img').each(function() {
+                    var src = $(this).attr('src');
+                    var newSrc = src.replace('thumb_large', 'thumb_small');
+                    $(this).attr('src', newSrc);
+                });
                 break;
         }
 
-        if ($('.search').hasClass('js-hide')) {
+        if ($('.js-interests').hasClass('js-hide')) {
             setRotation(e.keyCode);
             setDirection(e.keyCode);
             move(e.keyCode, dir);
@@ -352,29 +423,42 @@
         });
     });
 
+    function letsDoIt(docs, isInterests) {
+        $('.js-maze-wrapper').removeClass('js-opague');
+        $('.js-maze').empty();
+
+        generateMap();
+
+        if (isInterests) {
+            constructInterestsDocs(docs);
+        } else {
+            constructDocs(docs);
+        }
+
+        constructMap();
+        constructFloor();
+        appendMap();
+
+        $('.js-interests').addClass('js-hide');
+    }
+
     $('.js-search-btn').on('click', function(e) {
         e.preventDefault();
 
         var title = $('.js-search-text').val();
-
-        $('.js-maze').empty();
-
         getDocs('title:' + title + '&sortBy=views&language=en').then(function(docs) {
-            return docs;
-        }).then(function(docs) {
-            constructDocs(docs);
-            constructMap();
-            constructFloor();
-            appendMap();
+            letsDoIt(docs);
         });
+    });
 
-        $('.search').addClass('js-hide');
+    $('select').on('change', function() {
+        console.log(this.value);
     });
 
     $('.js-search-nav-btn').on('click', function(e) {
-        $('.search.js-hide').removeClass('js-hide');
-        $('.search').one(onTransitionEnd, function(e) {
-            console.log('testsretsetet');
+        $('.js-interests.js-hide').removeClass('js-hide');
+        $('.js-maze-wrapper').addClass('js-opague');
+        $('.js-maze-wrapper').one(onTransitionEnd, function(e) {
             $('.js-search-text').focus();
         });
     });
@@ -383,6 +467,36 @@
         if (e.keyCode == 13) {
             $(".js-search-btn").click();
         }
+    });
+
+    function constructInterestsDropdown(interests) {
+        for (var i = 0; i < interests.length; i++) {
+            $('.js-interests-inner').append('<a class="interest interest--main js-interest" data-id="' + interests[i].interestId + '">' + interests[i].title + '</a>');
+
+            var sub = interests[i].subinterests;
+            for (var j = 0; j < sub.length; j++) {
+                $('.js-interests-inner').append('<a class="interest interest--sub js-interest" data-id="' + sub[j].subinterestId + '">' + sub[j].title + '</a>');
+            }
+        }
+    }
+
+    $.getJSON('/interests', function(data) {
+        if (data) {
+            constructInterestsDropdown(data.interests);
+        } else {
+            new Error('the value of "data" is not truthy...');
+        }
+    });
+
+    $('body').on('click', '.js-interest', function(e) {
+        e.preventDefault();
+        $.getJSON('/iosinterest?q=' + $(this).attr('data-id'), function(data) {
+            if (data) {
+                letsDoIt(data.rsp._content.stream, true);
+            } else {
+                new Error('the value of "data" is not truthy...');
+            }
+        });
     });
 
     // $('.js-search-text').val('games');
