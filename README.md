@@ -2,6 +2,11 @@
 
 ## Installation
 
+Try it here: https://issuu-maze.herokuapp.com/
+
+
+## Installation
+
 	npm install
 
 
@@ -18,7 +23,7 @@ Builds are stupid...
 ## Todo
 
 Hackday goals:
-- [ ] Deploy on heroku
+- [x] Deploy on heroku
 - [ ] cue up clicks for reader to enhance experience...
 - [ ] Add dropdown with example layouts for the maze
 - [x] Beautify code
