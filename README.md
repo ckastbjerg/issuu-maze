@@ -20,9 +20,10 @@ Builds are stupid...
 - [x] Beautify code
 - [x] Add takana
 - [ ] Allow multiple searches (without reloading)
-- [ ] Create custom 3d awsomeness reader (load individual pages when document cover is clicked)
+- [x] Create custom 3d reader (load individual pages when document cover is clicked)
 - [ ] Create overlay when hovering document cover to display some metadata
 - [ ] Have documents transition in when search is performed (like in "The Matrix" weapon scene!)
+- [ ] Fix covers/pages being inverted
 - [ ] Add auto prefixing (or just manual)
 - [ ] Add arms/gun/something like in a FPS
 - [ ] Improove rotation (currently walls gets in the way)

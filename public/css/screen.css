@@ -30,6 +30,19 @@ img {
 
 
 
+/* Animations
+   ========================================================================== */
+
+@-webkit-keyframes page-slide {
+    100% { left: 0; }
+}
+
+@keyframes page-slide {
+    100% { left: 0; }
+}
+
+
+
 /* Logo (text)
    ========================================================================== */
 
@@ -166,25 +179,52 @@ img {
 }
 
 .maze__wall {
+	position: absolute;
+	left: 0;
 	background: #f8f8f8;
 	opacity: .9;
 	width: 400px;
 	height: 400px;
 	display: block;
-	position: absolute;
 	overflow: hidden;
-	transition: .3s;
-	border-top: 30px solid transparent;
-	border-right: 60px solid transparent;
-	border-bottom: 30px solid transparent;
-	border-left: 60px solid transparent;
+	transition: 1s;
+	border-top: 30px solid white;
+	border-right: 60px solid white;
+	border-bottom: 30px solid white;
+	border-left: 60px solid white;
+}
+
+.maze.js-fade .maze__wall:not(.js-reading) {
+	opacity: .5;
+}
+
+.maze.js-fade .maze__wall:not(.js-reading) img {
+	-webkit-filter: blur(2px);
+	filter: blur(2px);
+}
+
+.maze__wall.js-reading {
+	opacity: 1;
 }
 
 .maze__wall:hover {
 	opacity: 1;
 }
 
+.maze__wall img.js-animate-in {
+	position: absolute;
+	left: 100%;
+	-webkit-animation: page-slide 0.5s forwards;
+	animation: page-slide 0.5s forwards;
+}
 
+.maze__wall img.js-previous-page {
+	display: none;
+}
+
+.maze__wall img.js-next-page {
+	display: none;
+}
 
 /* Debugger
    ========================================================================== */

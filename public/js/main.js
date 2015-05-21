@@ -260,7 +260,32 @@
         }
     }
 
-    window.addEventListener("keydown", function(e) {
+    function preloadImage($Img) {
+        var src = getNextImageSrc($Img);
+        (new Image()).src = src;
+    }
+
+    function getNextImageSrc($img) {
+        var imgSrc = $img.attr('src'),
+            currentPageNum = imgSrc.split('page_')[1].split('.')[0],
+            nextPageNum = parseInt(currentPageNum) + 1,
+            nextImgSrc = imgSrc.replace('page_' + currentPageNum, 'page_' + nextPageNum);
+
+        return nextImgSrc;
+    }
+
+    function readFadeIn($doc) {
+        $('.js-reading').removeClass('js-reading');
+        $doc.addClass('js-reading');
+        $('.js-maze').addClass('js-fade');
+    }
+
+    function readFadeOut() {
+        $('.js-reading').removeClass('js-reading');
+        $('.js-maze').removeClass('js-fade');
+    }
+
+    $('body').on('keydown', function(e) {
         setRotation(e.keyCode);
         setDirection(e.keyCode);
         move(e.keyCode, dir);
@@ -281,7 +306,36 @@
         $('.js-debugger').remove();
         $('body').append(debug);
 
+        readFadeOut();
+
         $('.js-maze').css('transform', 'rotateY(' + rotation + 'deg) translate3d(' + tempX + 'px, 0, ' + tempZ + 'px)');
+    });
+
+    $('body').on('mouseenter', '.js-document-cover', function(e) {
+        preloadImage($(this).find('img:last-child'));
+    });
+
+    $('body').on('click', '.js-document-cover', function(e) {
+        e.preventDefault();
+
+        readFadeIn($(this));
+
+        var $img = $(this).find('img:last-child'),
+            nextImgSrc = getNextImageSrc($img);
+
+        $newImg = $('<img src="' + nextImgSrc + '">');
+        $(this).append($newImg);
+
+        $newImg.on('load', function() {
+
+            $newImg.addClass('js-animate-in');
+            $newImg.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
+                preloadImage($newImg);
+                $newImg.removeClass('js-animate-in');
+                $newImg.addClass('js-current-page');
+                $img.remove();
+            });
+        });
     });
 
     $('.js-search-btn').on('click', function(e) {
