@@ -1,6 +1,6 @@
 (function($) {
-    var UNIT = 400;
-    var quality = '_thumb_large';
+    var UNIT = 800;
+    var quality = '';
     var onAnimationEnd = 'webkitAnimationEnd oanimationend msAnimationEnd animationend';
     var onTransitionEnd = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend';
     var magz = [];
@@ -275,23 +275,23 @@
     function move(keyCode, dir) {
         if (keyCode === 38) { // up
             if (dir === 1) {
-                z += 400;
+                z += UNIT;
             } else if (dir === 2) {
-                x -= 400;
+                x -= UNIT;
             } else if (dir === 3) {
-                z -= 400;
+                z -= UNIT;
             } else if (dir === 4) {
-                x += 400;
+                x += UNIT;
             }
         } else if (keyCode === 40) { // down
             if (dir === 1) {
-                z -= 400;
+                z -= UNIT;
             } else if (dir === 2) {
-                x += 400;
+                x += UNIT;
             } else if (dir === 3) {
-                z += 400;
+                z += UNIT;
             } else if (dir === 4) {
-                x -= 400;
+                x -= UNIT;
             }
         }
     }
@@ -299,10 +299,10 @@
     function setXOffsetAdjustment(dir) {
         switch (dir) {
             case 2:
-                xOffsetAdjustment = -800;
+                xOffsetAdjustment = -400 * 2;
                 break;
             case 4:
-                xOffsetAdjustment = 800;
+                xOffsetAdjustment = 400 * 2;
                 break;
             default:
                 xOffsetAdjustment = 0;
@@ -312,16 +312,16 @@
     function setZOffsetAdjustment(dir) {
         switch (dir) {
             case 1:
-                zOffsetAdjustment = 200;
+                zOffsetAdjustment = 400;
                 break;
             case 2:
-                zOffsetAdjustment = -600;
+                zOffsetAdjustment = -400;
                 break;
             case 3:
-                zOffsetAdjustment = -1400;
+                zOffsetAdjustment = -1200;
                 break;
             case 4:
-                zOffsetAdjustment = -600;
+                zOffsetAdjustment = -400;
                 break;
         }
     }
@@ -385,6 +385,8 @@
                 '<span>x: ' + x + '</span>' +
                 '<span>rotation: ' + rotation + '</span>' +
                 '<span>dirOffset: ' + dirOffset + '</span>' +
+                '<span>xOffsetAdjustment: ' + xOffsetAdjustment + '</span>' +
+                '<span>zOffsetAdjustment: ' + zOffsetAdjustment + '</span>' +
                 '</div>';
 
             $('.js-debugger').remove();

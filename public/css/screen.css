@@ -238,10 +238,10 @@ img {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	margin-left: calc(-400px/2);
-	margin-top: calc(-400px/2);
-	width: 400px;
-	height: 400px;
+	margin-left: calc(-800px/2);
+	margin-top: calc(-800px/2);
+	width: 800px;
+	height: 800px;
 	perspective: 1000px;
 	transition: 1s;
 }
@@ -274,8 +274,8 @@ img {
 	left: 0;
 	background: #3c505d;
 	opacity: 0;
-	width: 400px;
-	height: 400px;
+	width: 800px;
+	height: 800px;
 	display: block;
 	overflow: hidden;
 	transition: 2s;
