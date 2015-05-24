@@ -7,6 +7,9 @@
 
     var map;
 
+    // Feature toggles
+    var enabledFeatureMagnifyingGlass = true;
+
     var getDocs = function(query) {
         var d = $.Deferred();
 
@@ -503,5 +506,67 @@
 
     // $('.js-search-text').val('games');
     // $('.js-search-btn').click();
+
+    if (enabledFeatureMagnifyingGlass) {
+        var native_width = 0;
+        var native_height = 0;
+
+        //Now the mousemove function
+        $('body').on('mousemove', '.js-magnify', function(e) {
+            if (!native_width && !native_height) {
+                var image_object = new Image();
+                image_object.src = $(".js-magnify-image").attr("src");
+                native_width = image_object.width;
+                native_height = image_object.height;
+            } else {
+                var magnify_offset = $(this).offset();
+                var mx = e.pageX - magnify_offset.left;
+                var my = e.pageY - magnify_offset.top;
+
+                if (mx < $(this)[0].getBoundingClientRect().width && my < $(this)[0].getBoundingClientRect().height && mx > 0 && my > 0) {
+                    $(".js-magnify-glass").fadeIn(100);
+                } else {
+                    $(".js-magnify-glass").fadeOut(100);
+                }
+                if ($(".js-magnify-glass").is(":visible")) {
+                    var rx = Math.round(mx / $(".js-magnify-image")[0].getBoundingClientRect().width * native_width - $(".js-magnify-glass")[0].getBoundingClientRect().width / 2) * -1;
+                    var ry = Math.round(my / $(".js-magnify-image")[0].getBoundingClientRect().height * native_height - $(".js-magnify-glass")[0].getBoundingClientRect().height / 2) * -1;
+                    var bgp = rx + "px " + ry + "px";
+
+                    var px = mx - $(".js-magnify-glass")[0].getBoundingClientRect().width / 2;
+                    var py = my - $(".js-magnify-glass")[0].getBoundingClientRect().height / 2;
+
+                    $(".js-magnify-glass").css({
+                        left: px,
+                        top: py,
+                        backgroundPosition: bgp
+                    });
+                }
+            }
+        });
+
+        $('body').on('mouseenter', '.js-document-cover', function(e) {
+            var $magnify = $('<div class="magnify js-magnify"></div>');
+            var $magnifyGlass = $('<div class="magnify__glass js-magnify-glass"><div>');
+            var $magnifyImage = $(this).find('img:last-child').addClass('magnify__image js-magnify-image');
+
+            $magnify.width($magnifyImage.width());
+            $magnifyImage.width($magnifyImage.width());
+            $magnifyGlass.css({
+                background: 'url(' + $magnifyImage.attr('src') + ') no-repeat'
+            });
+
+            $magnifyGlass.appendTo($magnify);
+            $magnifyImage.appendTo($magnify);
+            $magnify.appendTo($(this));
+        });
+
+
+        $('body').on('mouseleave', '.js-document-cover', function(e) {
+            $(this).find('.js-magnify-image').removeClass('magnify__image js-magnify-image').appendTo($(this));
+            $(this).find('.js-magnify').remove();
+        });
+    }
+
 
 })(jQuery);
