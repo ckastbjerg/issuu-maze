@@ -42,14 +42,17 @@ Nice to have:
 - [x] Don't allow walking through walls
 - [x] Improove wall generation algorithm (in some scenarios walls colide)
 - [x] Add arms/gun/something like in a FPS (oh yeah!)
+- [x] Make it possible to use a specific users documents for maze generation
 - [ ] Refactor!!!
 - [ ] Update url with search params to allow sharing of maze's
-- [ ] Make it possible to use stacks for maze generation
+- [ ] Make it possible to use stacks for maze generation (is this possible?)
 - [ ] Wait for move before allowing next move (when using arrow keys)
+- [ ] Limit amount of pages that can be read and the refer to issuu
 - [ ] Make it possible to slide left and right by holding shift + left/right
 - [ ] Create overlay when hovering document cover to display some metadata
 - [ ] Add prefixing
 - [ ] Only render visible documents to screen
+- [ ] Use transform: translate instead of position for page flip animation
 - [ ] Create option to configure maze layout runtime (a map editor)
 - [ ] Create option to configure start position in maze
 - [ ] cue up clicks for reader to enhance experience...
