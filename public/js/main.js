@@ -17,7 +17,7 @@
         featureToggles[$(this).attr('data-ref')] = $(this).is(':checked') ? true : false;
     });
 
-    $('.js-choose-layout').on('change', function() {
+    $('.js-maze-type').on('change', function() {
         if (magz.length > 0) {
             letsDoIt();
         }
@@ -496,7 +496,7 @@
                 break;
         }
 
-        if ($('.js-front').hasClass('js-hide')) {
+        if (!$('.js-front').hasClass('js-show')) {
             setDirection(e.keyCode);
             move(e.keyCode, dir);
             setXOffsetAdjustment(dir);
@@ -572,7 +572,7 @@
     });
 
     $('.js-search-nav-btn').on('click', function(e) {
-        $('.js-front.js-hide').removeClass('js-hide');
+        $('.js-front').addClass('js-show');
         $('.js-maze-wrapper').addClass('js-opague');
         $('.js-maze-wrapper').one(onTransitionEnd, function(e) {
             $('.js-search-text').focus();

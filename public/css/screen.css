@@ -173,19 +173,19 @@ img {
    ========================================================================== */
 
 .front {
+	opacity: 0;
+	visibility: hidden;
 	z-index: 1000;
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	display: table;
-	visibility: visible;
-	opacity: .85;
 	transition: 1s;
 }
 
-.front.js-hide {
-	opacity: 0;
-	visibility: hidden;
+.front.js-show {
+	visibility: visible;
+	opacity: .85;
 }
 
 .front__inner {
@@ -279,6 +279,22 @@ img {
 	border-right: 1px solid #3a4d5a;
 }
 
+.maze__wall.js-show {
+	opacity: .9;
+}
+
+.maze.js-fade .maze__wall:not(.js-reading) {
+	opacity: .2;
+}
+
+.maze__wall.js-reading {
+	opacity: 1;
+}
+
+.maze__wall:hover {
+	opacity: 1;
+}
+
 .js-god-mode .maze__wall {
 	background: url(../assets/wall.png);
 	border-top: 30px solid transparent;
@@ -314,18 +330,6 @@ img {
 
 .js-god-mode .maze__wall:nth-child(4n+4):before {
 	background: url(../assets/enemy4.gif) no-repeat;
-}
-
-.maze.js-fade .maze__wall:not(.js-reading) {
-	opacity: .2;
-}
-
-.maze__wall.js-reading {
-	opacity: 1;
-}
-
-.maze__wall:hover {
-	opacity: 1;
 }
 
 .maze__wall-inner {
