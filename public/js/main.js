@@ -170,7 +170,6 @@
 
     var appendMap = function() {
         for (var i = magz.length - 1; i >= 0; i--) {
-            console.log(magz[i].used);
             if (magz[i].used) {
                 appendDocument(magz[i]);
             }
@@ -204,23 +203,29 @@
                 tempTranslate = ' translate(' + (doc.translate - 100) + 'px, 0)';
                 break;
             case 180:
-                tempTranslateZ = ' translateZ(' + (doc.translateZ + 10000) + 'px)';
+                tempTranslateZ = ' translateZ(' + (doc.translateZ + 100) + 'px)';
                 break;
         }
 
-        var $link = $('<a class="maze__wall js-document-cover" data-docId="' + doc.id + '" class="side-' + doc.id + '" href="' + doc.link + '"></a>');
-        $link.css('transform', tempTranslate + tempTranslateZ + rotateY + scale);
+        var $wall = $('<a class="maze__wall js-document-cover" data-docId="' + doc.id + '" href="' + doc.link + '"></a>');
+        var $wallInner = $('<div class="maze__wall-inner js-wall-inner"></div>');
+        $wall.css('transform', tempTranslate + tempTranslateZ + rotateY + scale);
 
-        var $img = $('<img src="' + doc.imageSrc + '" />');
+        var $img = $('<img class="maze__wall-image" src="' + doc.imageSrc + '" />');
+        $img.on('load', function() {
+            $(this).addClass('js-loaded');
+        });
 
         setTimeout(function() {
-            $link.addClass('js-show').css({
+            $wall.addClass('js-show').css({
                 'transform': translate + translateZ + rotateY + scale
             });
+
         }, 1 + (Math.random() * 1000));
 
-        $img.appendTo($link);
-        $link.appendTo($('.js-maze'));
+        $img.appendTo($wallInner);
+        $wallInner.appendTo($wall);
+        $wall.appendTo($('.js-maze'));
     };
 
     $(".js-maze").on("mouseenter", "a", function(e) {
@@ -410,14 +415,15 @@
 
         readFadeIn($(this));
 
-        var $img = $(this).find('img:last-child'),
+        var $wallInner = $(this).find('.js-wall-inner'),
+            $img = $wallInner.find('img:last-child'),
             nextImgSrc = getNextImageSrc($img);
 
-        $newImg = $('<img src="' + nextImgSrc + '">');
-        $(this).append($newImg);
+        $newImg = $('<img class="maze__wall-image" src="' + nextImgSrc + '">');
+        $wallInner.append($newImg);
 
         $newImg.on('load', function() {
-
+            $newImg.addClass('js-loaded');
             $newImg.addClass('js-animate-in');
             $newImg.one(onAnimationEnd, function(e) {
                 preloadImage($newImg);

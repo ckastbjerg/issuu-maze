@@ -279,10 +279,12 @@ img {
 	display: block;
 	overflow: hidden;
 	transition: 2s;
-	border-top: 30px solid #3c505d;
-	border-right: 60px solid #3c505d;
-	border-bottom: 30px solid #3c505d;
-	border-left: 60px solid #3c505d;
+	padding: 40px 80px;
+	border-right: 1px solid #1c252b;
+/*	border-top: 40px solid #3c505d;
+	border-right: 80px solid #3c505d;
+	border-bottom: 40px solid #3c505d;
+	border-left: 80px solid #3c505d;*/
 }
 
 .js-god-mode .maze__wall {
@@ -338,21 +340,32 @@ img {
 	opacity: 1;
 }
 
-.maze__wall img.js-animate-in {
+.maze__wall-inner {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.maze__wall-image {
+	opacity: 0;
 	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	transition: 1s;
+}
+
+.maze__wall-image.js-loaded {
+	opacity: 1;
+}
+
+.maze__wall-image.js-animate-in {
 	left: 100%;
 	-webkit-animation: page-slide 0.5s forwards;
 	animation: page-slide 0.5s forwards;
 }
-
-.maze__wall img.js-previous-page {
-	display: none;
-}
-
-.maze__wall img.js-next-page {
-	display: none;
-}
-
 
 .github-source {
 	z-index: 2000;
