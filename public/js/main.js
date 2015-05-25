@@ -26,7 +26,7 @@
     var getDocs = function(query) {
         var d = $.Deferred();
 
-        $.getJSON('/query?q=' + query + '&pageSize=50', function(data) {
+        $.getJSON('/query?' + query + '&pageSize=50', function(data) {
             if (data) {
                 d.resolve(data.response.docs);
             } else {
@@ -561,7 +561,7 @@
         e.preventDefault();
 
         var title = $('.js-search-text').val();
-        getDocs('title:' + title + '&sortBy=views&language=en').then(function(docs) {
+        getDocs('q=title:' + title + '&sortBy=views&language=en').then(function(docs) {
             constructDocs(docs);
             letsDoIt();
         });
@@ -585,7 +585,7 @@
         }
     });
 
-    function constructInterestsDropdown(interests) {
+    function constructInterestsList(interests) {
         for (var i = 0; i < interests.length; i++) {
             $('.js-front-inner').append('<a class="interest interest--main js-interest" data-id="' + interests[i].interestId + '">' + interests[i].title + '</a>');
 
@@ -598,7 +598,10 @@
 
     $.getJSON('/interests', function(data) {
         if (data) {
-            constructInterestsDropdown(data.interests);
+            constructInterestsList(data.interests);
+            if (location.pathname === '/') {
+                $('.js-front').addClass('js-show');
+            }
         } else {
             new Error('the value of "data" is not truthy...');
         }
@@ -689,13 +692,36 @@
         $('.js-maze-wrapper').removeClass('js-opague');
         $('.js-maze').empty();
 
-        console.log($('.js-choose-layout').val());
-        generateMap($('.js-choose-layout').val());
+        console.log($('.js-maze-type').val());
+        generateMap($('.js-maze-type').val());
         constructMap();
         // constructFloor();
         appendMap();
 
-        $('.js-front').addClass('js-hide');
+        $('.js-front').removeClass('js-show');
+    }
+
+
+    //
+    // Try init from url
+    //
+
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    if (location.pathname !== '/') {
+        var username = location.pathname.split('/')[1];
+        console.log(getParameterByName('mazetype'));
+        $('.js-maze-type').val(getParameterByName('mazetype'));
+
+        getDocs('username=' + username).then(function(docs) {
+            constructDocs(docs);
+            letsDoIt();
+        });
     }
 
 })(jQuery);
