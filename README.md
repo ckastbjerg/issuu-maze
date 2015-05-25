@@ -24,8 +24,7 @@ Builds are stupid...
 
 Hackday goals:
 - [x] Deploy on heroku
-- [ ] cue up clicks for reader to enhance experience...
-- [ ] Add dropdown with example layouts for the maze
+- [x] Add dropdown with example layouts for the maze
 - [x] Beautify code
 - [x] Add takana
 - [x] Create custom 3d reader (load individual pages when document cover is clicked)
@@ -47,5 +46,6 @@ Nice to have:
 - [ ] Don't allow walking through walls
 - [ ] Only render visible documents to screen
 - [ ] Create option to configure maze layout runtime (a map editor)
+- [ ] cue up clicks for reader to enhance experience...
 - [x] Improove wall generation algorithm (in some scenarios walls colide)
 - [x] Add arms/gun/something like in a FPS (oh yeah!)

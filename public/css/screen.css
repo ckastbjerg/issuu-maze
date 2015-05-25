@@ -367,27 +367,13 @@ img {
 	animation: page-slide 0.5s forwards;
 }
 
-.github-source {
-	z-index: 2000;
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
-	color: white;
-	text-decoration: none;
-	width: 30px;
-	height: 30px;
-	display: block;
-	background: url(../assets/github.png) no-repeat;
-	background-size: 30px;
-}
-
 
 /* Debugger
    ========================================================================== */
 
 .debugger {
 	position: absolute;
-	bottom: 0;
+	bottom: 34px;
 	left: 0;
 	background-color: black;
 	color: white;
@@ -398,16 +384,53 @@ img {
 
 .debugger span {
 	margin-right: 10px;
+	float: left;
+	clear: left;
 }
 
 
 
+/* Feature toggles
+   ========================================================================== */
+
+.feature-toggles {
+	z-index: 1001;
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+}
+
+.feature-toggles__item {
+	display: inline-block;
+	margin-left: 10px;
+	font-size: 14px;
+}
+
+.feature-toggles__item span {
+	position: relative;
+	top: 1px;
+}
+
+.feature-toggles__item:first-child {
+	margin-left: 0;
+}
+
+
+
+/* Magnify
+   ========================================================================== */
+
 .magnify {
-    position: relative;
-    z-index: 99999;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    position: absolute;
+    z-index: 9999;
 }
 
 .magnify__glass {
+	z-index: 99999;
     width: 175px; height: 175px;
     position: absolute;
     border-radius: 100%;
@@ -419,4 +442,38 @@ img {
 
 .magnify__image {
     display: block;
+}
+
+
+
+/* Nav bottom
+   ========================================================================== */
+
+.nav-bottom {
+	position: absolute;
+	z-index: 9999;
+	bottom: 10px;
+	right: 10px;
+}
+
+.nav-bottom__item {
+	display: inline-block;
+}
+
+.nav-bottom__item a {
+	color: #000;
+	text-decoration: none;
+}
+
+.nav-bottom__item span,
+.nav-bottom__item img {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 16px;
+}
+
+.powered-by img {
+	height: 16px;
+	width: auto;
+	padding-left: 5px;
 }

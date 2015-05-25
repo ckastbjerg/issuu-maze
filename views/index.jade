@@ -9,14 +9,16 @@ html
     .header
       .logo issuu maze
       .nav
-        .nav__item.js-top-view-btn Top view
-        .nav__item.js-search-nav-btn Search
         select.nav__item.js-choose-layout
           label Maze layout:
-          option(value='default', selected) Layout: random
-          option(value='hallway') Layout: hallway
-          option(value='emptyroom') Layout: simple
-          option(value='designed') Layout: custom
+          option(value='default', selected) Maze type: default
+          option(value='hallway') Maze type: hallway
+          option(value='spiral') Maze type: spiral
+          option(value='looper') Maze type: looper
+          option(value='multi') Maze type: multi
+          option(value='random') Maze type: random
+        .nav__item.js-top-view-btn Top view
+        .nav__item.js-search-nav-btn Search
     .interests.js-interests
       .interests__inner.js-interests-inner
         h2.interests__title Choose your interest
@@ -25,6 +27,23 @@ html
           input(class='search__btn js-search-btn', type="button", value="Go!")
     .maze-wrapper.js-maze-wrapper
       .maze.js-maze
-    a(class="github-source", href="https://github.com/ckastbjerg/issuu-maze" target="_blank")
+    ul.feature-toggles
+      li.feature-toggles__item
+        input(class="js-feature-toggle" data-ref="walkThroughWalls" type="checkbox")
+        span Walk through walls
+      li.feature-toggles__item
+        input(class="js-feature-toggle" data-ref="magnifyingGlass" type="checkbox")
+        span Magnifying glass
+      li.feature-toggles__item
+        input(class="js-feature-toggle" data-ref="debugger" type="checkbox")
+        span Debugger
+    .nav-bottom
+      //- a(class="nav-bottom__item github-source", href="https://github.com/ckastbjerg/issuu-maze" target="_blank")
+      //-   span Get source
+      .powered-by.nav-bottom__item
+        a(href="http://issuu.com" target="_blank")
+          span Powered by
+          //- img(src="http://static.issuu.com/uic/368/dist/images/logo-part1.png", alt="")
+          img(src="http://static.issuu.com/uic/368/dist/images/logo-part2.png", alt="")
     script(src="js/vendor/jquery.js")
     script(src="js/main.js")

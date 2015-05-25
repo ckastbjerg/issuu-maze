@@ -7,8 +7,21 @@
 
     var map;
 
-    // Feature toggles
-    var enabledFeatureMagnifyingGlass = true;
+    var featureToggles = {
+        magnifyingGlass: false,
+        walkThroughWalls: false,
+        debugger: false
+    };
+
+    $('.js-feature-toggle').on('change', function() {
+        featureToggles[$(this).attr('data-ref')] = $(this).is(':checked') ? true : false;
+    });
+
+    $('.js-choose-layout').on('change', function() {
+        if (magz.length > 0) {
+            letsDoIt();
+        }
+    });
 
     var getDocs = function(query) {
         var d = $.Deferred();
@@ -68,18 +81,34 @@
     function generateMap(type) {
         if (type === 'hallway') {
             map = getMapArray(20, 1);
-        } else if (type === 'emptyroom') {
-            map = getMapArray(6, 6);
-        } else if (type === 'designed') {
+        } else if (type === 'looper') {
             map = [
-                [1, 1, 1, 1, 1, 1, 1, 0],
-                [1, 1, 0, 0, 0, 1, 1, 1],
-                [1, 1, 1, 1, 0, 1, 1, 1],
-                [1, 1, 0, 1, 1, 1, 0, 1],
-                [1, 1, 1, 1, 1, 1, 1, 1],
+                [0, 1, 1, 1, 0],
+                [1, 1, 0, 1, 1],
+                [1, 0, 0, 0, 1],
+                [1, 1, 0, 1, 1],
+                [0, 1, 1, 1, 0],
             ];
-        } else {
-            map = getMapArray(6, 6);
+        } else if (type === 'spiral') {
+            map = [
+                [1, 1, 1, 0, 1],
+                [1, 0, 1, 0, 1],
+                [1, 0, 1, 0, 1],
+                [1, 0, 1, 0, 1],
+                [1, 0, 1, 1, 1]
+            ];
+        } else if (type === 'multi') {
+            map = [
+                [1, 1, 1, 3, 1, 1, 1],
+                [1, 1, 3, 3, 3, 1, 1],
+                [1, 1, 1, 3, 3, 3, 3],
+                [3, 3, 3, 3, 3, 3, 3],
+                [3, 1, 3, 3, 1, 1, 1],
+                [3, 1, 1, 3, 3, 2, 1],
+                [3, 3, 3, 3, 1, 1, 1]
+            ];
+        } else if (type === 'random') {
+            map = getMapArray(5, 5);
 
             for (var i = map.length - 1; i >= 0; i--) {
                 for (var j = 0; j < map[i].length; j++) {
@@ -89,6 +118,13 @@
                     }
                 }
             }
+        } else { // default to random array
+            map = [
+                [1, 1, 1, 1],
+                [1, 1, 1, 1],
+                [1, 1, 1, 1],
+                [1, 1, 1, 1],
+            ];
         }
     }
 
@@ -129,7 +165,6 @@
                     bottomNeighbor = nextRow ? nextRow[j] : undefined;
 
                 if (doCreateWall(blockType, topNeighbor)) {
-                    console.log('topNeighbor', topNeighbor);
                     mag = getMag();
                     mag.translate = j * UNIT;
                     mag.translateZ = i * UNIT - UNIT;
@@ -401,31 +436,35 @@
         }
 
         if ($('.js-interests').hasClass('js-hide')) {
-            setRotation(e.keyCode);
             setDirection(e.keyCode);
             move(e.keyCode, dir);
             setXOffsetAdjustment(dir);
             setZOffsetAdjustment(dir);
+            setRotation(e.keyCode);
 
             var tempX = x + xOffsetAdjustment;
             var tempZ = z + zOffsetAdjustment;
 
-            var debug = '<div class="debugger js-debugger">' +
-                '<span>dir: ' + dir + '</span>' +
-                '<span>z: ' + z + '</span>' +
-                '<span>x: ' + x + '</span>' +
-                '<span>rotation: ' + rotation + '</span>' +
-                '<span>dirOffset: ' + dirOffset + '</span>' +
-                '<span>xOffsetAdjustment: ' + xOffsetAdjustment + '</span>' +
-                '<span>zOffsetAdjustment: ' + zOffsetAdjustment + '</span>' +
-                '</div>';
-
             $('.js-debugger').remove();
-            $('body').append(debug);
+
+            if (featureToggles.debugger) {
+                var debug = '<div class="debugger js-debugger">' +
+                    '<span>dir: ' + dir + '</span>' +
+                    '<span>z: ' + z + '</span>' +
+                    '<span>x: ' + x + '</span>' +
+                    '<span>rotation: ' + rotation + '</span>' +
+                    '<span>dirOffset: ' + dirOffset + '</span>' +
+                    '<span>xOffsetAdjustment: ' + xOffsetAdjustment + '</span>' +
+                    '<span>zOffsetAdjustment: ' + zOffsetAdjustment + '</span>' +
+                    '</div>';
+
+                $('body').append(debug);
+            }
 
             readFadeOut();
 
             $('.js-maze').css('transform', 'rotateY(' + rotation + 'deg) translate3d(' + tempX + 'px, 0, ' + tempZ + 'px)');
+
         }
     });
 
@@ -457,31 +496,13 @@
         });
     });
 
-    function letsDoIt(docs, isInterests) {
-        $('.js-maze-wrapper').removeClass('js-opague');
-        $('.js-maze').empty();
-
-        generateMap();
-
-        if (isInterests) {
-            constructInterestsDocs(docs);
-        } else {
-            constructDocs(docs);
-        }
-
-        constructMap();
-        constructFloor();
-        appendMap();
-
-        $('.js-interests').addClass('js-hide');
-    }
-
     $('.js-search-btn').on('click', function(e) {
         e.preventDefault();
 
         var title = $('.js-search-text').val();
         getDocs('title:' + title + '&sortBy=views&language=en').then(function(docs) {
-            letsDoIt(docs);
+            constructDocs(docs);
+            letsDoIt();
         });
     });
 
@@ -526,7 +547,8 @@
         e.preventDefault();
         $.getJSON('/iosinterest?q=' + $(this).attr('data-id'), function(data) {
             if (data) {
-                letsDoIt(data.rsp._content.stream, true);
+                constructInterestsDocs(data.rsp._content.stream);
+                letsDoIt();
             } else {
                 new Error('the value of "data" is not truthy...');
             }
@@ -536,12 +558,12 @@
     // $('.js-search-text').val('games');
     // $('.js-search-btn').click();
 
-    if (enabledFeatureMagnifyingGlass) {
-        var native_width = 0;
-        var native_height = 0;
+    var native_width = 0;
+    var native_height = 0;
 
-        //Now the mousemove function
-        $('body').on('mousemove', '.js-magnify', function(e) {
+    //Now the mousemove function
+    $('body').on('mousemove', '.js-magnify', function(e) {
+        if (featureToggles.magnifyingGlass) {
             if (!native_width && !native_height) {
                 var image_object = new Image();
                 image_object.src = $(".js-magnify-image").attr("src");
@@ -572,9 +594,11 @@
                     });
                 }
             }
-        });
+        }
+    });
 
-        $('body').on('mouseenter', '.js-document-cover', function(e) {
+    $('body').on('mouseenter', '.js-wall-inner', function(e) {
+        if (featureToggles.magnifyingGlass) {
             var $magnify = $('<div class="magnify js-magnify"></div>');
             var $magnifyGlass = $('<div class="magnify__glass js-magnify-glass"><div>');
             var $magnifyImage = $(this).find('img:last-child').addClass('magnify__image js-magnify-image');
@@ -588,14 +612,29 @@
             $magnifyGlass.appendTo($magnify);
             $magnifyImage.appendTo($magnify);
             $magnify.appendTo($(this));
-        });
+        }
+    });
 
 
-        $('body').on('mouseleave', '.js-document-cover', function(e) {
+    $('body').on('mouseleave', '.js-wall-inner', function(e) {
+        if (featureToggles.magnifyingGlass) {
             $(this).find('.js-magnify-image').removeClass('magnify__image js-magnify-image').appendTo($(this));
             $(this).find('.js-magnify').remove();
-        });
-    }
+        }
+    });
 
+
+    function letsDoIt() {
+        $('.js-maze-wrapper').removeClass('js-opague');
+        $('.js-maze').empty();
+
+        console.log($('.js-choose-layout').val());
+        generateMap($('.js-choose-layout').val());
+        constructMap();
+        // constructFloor();
+        appendMap();
+
+        $('.js-interests').addClass('js-hide');
+    }
 
 })(jQuery);
