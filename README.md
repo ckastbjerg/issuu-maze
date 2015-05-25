@@ -38,14 +38,20 @@ Hackday goals:
 
 
 Nice to have:
-- [ ] Refactor!!!
-- [ ] Wait for move before allowing next move (when using arrow keys)
-- [ ] Create overlay when hovering document cover to display some metadata
-- [ ] Add prefixing
 - [x] Improove rotation (currently walls gets in the way)
 - [x] Don't allow walking through walls
-- [ ] Only render visible documents to screen
-- [ ] Create option to configure maze layout runtime (a map editor)
-- [ ] cue up clicks for reader to enhance experience...
 - [x] Improove wall generation algorithm (in some scenarios walls colide)
 - [x] Add arms/gun/something like in a FPS (oh yeah!)
+- [ ] Refactor!!!
+- [ ] Update url with search params to allow sharing of maze's
+- [ ] Make it possible to use stacks for maze generation
+- [ ] Wait for move before allowing next move (when using arrow keys)
+- [ ] Make it possible to slide left and right by holding shift + left/right
+- [ ] Create overlay when hovering document cover to display some metadata
+- [ ] Add prefixing
+- [ ] Only render visible documents to screen
+- [ ] Create option to configure maze layout runtime (a map editor)
+- [ ] Create option to configure start position in maze
+- [ ] cue up clicks for reader to enhance experience...
+- [ ] Use web sockets to create a "multiplayer" experience
+- [ ] Add some kind of gamification (maze quests, puzzles, etc.)
