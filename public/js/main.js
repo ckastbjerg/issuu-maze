@@ -496,7 +496,7 @@
                 break;
         }
 
-        if ($('.js-interests').hasClass('js-hide')) {
+        if ($('.js-front').hasClass('js-hide')) {
             setDirection(e.keyCode);
             move(e.keyCode, dir);
             setXOffsetAdjustment(dir);
@@ -572,7 +572,7 @@
     });
 
     $('.js-search-nav-btn').on('click', function(e) {
-        $('.js-interests.js-hide').removeClass('js-hide');
+        $('.js-front.js-hide').removeClass('js-hide');
         $('.js-maze-wrapper').addClass('js-opague');
         $('.js-maze-wrapper').one(onTransitionEnd, function(e) {
             $('.js-search-text').focus();
@@ -587,11 +587,11 @@
 
     function constructInterestsDropdown(interests) {
         for (var i = 0; i < interests.length; i++) {
-            $('.js-interests-inner').append('<a class="interest interest--main js-interest" data-id="' + interests[i].interestId + '">' + interests[i].title + '</a>');
+            $('.js-front-inner').append('<a class="interest interest--main js-interest" data-id="' + interests[i].interestId + '">' + interests[i].title + '</a>');
 
             var sub = interests[i].subinterests;
             for (var j = 0; j < sub.length; j++) {
-                $('.js-interests-inner').append('<a class="interest interest--sub js-interest" data-id="' + sub[j].subinterestId + '">' + sub[j].title + '</a>');
+                $('.js-front-inner').append('<a class="interest interest--sub js-interest" data-id="' + sub[j].subinterestId + '">' + sub[j].title + '</a>');
             }
         }
     }
@@ -695,7 +695,7 @@
         // constructFloor();
         appendMap();
 
-        $('.js-interests').addClass('js-hide');
+        $('.js-front').addClass('js-hide');
     }
 
 })(jQuery);

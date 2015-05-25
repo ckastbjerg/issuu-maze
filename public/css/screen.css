@@ -172,7 +172,7 @@ img {
 /* Interests
    ========================================================================== */
 
-.interests {
+.front {
 	z-index: 1000;
 	position: absolute;
 	width: 100%;
@@ -183,16 +183,12 @@ img {
 	transition: 1s;
 }
 
-.interests.js-hide {
+.front.js-hide {
 	opacity: 0;
 	visibility: hidden;
 }
 
-.interests.js-show {
-	transform: scale(.9);
-}
-
-.interests__inner {
+.front__inner {
 	display: table-cell;
 	vertical-align: middle;
 	padding: 5% 15%;
@@ -207,7 +203,7 @@ img {
 	cursor: pointer;
 }
 
-.interests__title {
+.front__title {
 	font-size: 46px;
 	margin-bottom: 16px;
 	font-weight: 200;
@@ -281,10 +277,6 @@ img {
 	transition: 2s;
 	padding: 40px 80px;
 	border-right: 1px solid #3a4d5a;
-/*	border-top: 40px solid #3c505d;
-	border-right: 80px solid #3c505d;
-	border-bottom: 40px solid #3c505d;
-	border-left: 80px solid #3c505d;*/
 }
 
 .js-god-mode .maze__wall {
@@ -322,10 +314,6 @@ img {
 
 .js-god-mode .maze__wall:nth-child(4n+4):before {
 	background: url(../assets/enemy4.gif) no-repeat;
-}
-
-.maze__wall.js-show {
-	opacity: .9;
 }
 
 .maze.js-fade .maze__wall:not(.js-reading) {
