@@ -92,6 +92,22 @@
         }
     }
 
+    function doCreateWall(blockType, neighbor) {
+        var doCreateWall = false;
+
+        if (blockType === 0 && neighbor !== undefined && (neighbor === 1 || neighbor === 2)) {
+            doCreateWall = true;
+        } else if (blockType === 1 && neighbor === undefined) {
+            doCreateWall = true;
+        }
+
+        if (blockType !== 3 && neighbor === 3) {
+            doCreateWall = true;
+        }
+
+        return doCreateWall;
+    }
+
     // translate is the horizontal position
     // translateZ is the depth/vertical position
     // rotateY is the flip/rotation amount
@@ -100,62 +116,69 @@
         numMagz = 0;
         var rows = map.length - 1;
 
-        for (var i = 0; i < map.length; i++) {
-            var cells = map.length - 1;
-            var mid = Math.floor(cells / 2);
-
-            var currRow = map[i],
+        map.forEach(function(row, i) {
+            var cells = map.length - 1,
                 prevRow = map[i - 1],
                 nextRow = map[i + 1];
 
-            for (var j = 0; j < map[i].length; j++) {
+            row.forEach(function(blockType, j) {
                 var mag = null,
-                    self = currRow[j],
-                    leftNeighbor = currRow[j - 1],
-                    rightNeighbor = currRow[j + 1],
+                    leftNeighbor = row[j - 1],
+                    rightNeighbor = row[j + 1],
                     topNeighbor = prevRow ? prevRow[j] : undefined,
                     bottomNeighbor = nextRow ? nextRow[j] : undefined;
 
-                if (!topNeighbor) {
+                if (doCreateWall(blockType, topNeighbor)) {
+                    console.log('topNeighbor', topNeighbor);
                     mag = getMag();
-                    mag.used = true;
                     mag.translate = j * UNIT;
                     mag.translateZ = i * UNIT - UNIT;
                     mag.rotateY = 0;
-                    numMagz++;
+
+                    if (blockType === 0) {
+                        mag.rotateY = 180;
+                    }
                 }
-                if (!bottomNeighbor) {
+                if (doCreateWall(blockType, bottomNeighbor)) {
                     mag = getMag();
-                    mag.used = true;
                     mag.translate = j * UNIT;
                     mag.translateZ = i * UNIT;
                     mag.rotateY = 180;
-                    numMagz++;
+
+                    if (blockType === 0) {
+                        mag.rotateY = 0;
+                    }
                 }
-                if (!leftNeighbor) {
+                if (doCreateWall(blockType, leftNeighbor)) {
                     mag = getMag();
-                    mag.used = true;
                     mag.translate = j * UNIT - UNIT / 2;
                     mag.translateZ = i * UNIT - UNIT / 2;
                     mag.rotateY = 90;
-                    numMagz++;
+
+                    if (blockType === 0) {
+                        mag.rotateY = -90;
+                    }
                 }
-                if (!rightNeighbor) {
+                if (doCreateWall(blockType, rightNeighbor)) {
                     mag = getMag();
-                    mag.used = true;
                     mag.translate = j * UNIT + UNIT / 2;
                     mag.translateZ = i * UNIT - UNIT / 2;
                     mag.rotateY = -90;
-                    numMagz++;
+
+                    if (blockType === 0) {
+                        mag.rotateY = 90;
+                    }
                 }
-            }
-        }
+            });
+        });
     };
 
     var getMag = function() {
         var mag = magz[numMagz];
 
         if (mag !== undefined) {
+            mag.used = true;
+            numMagz += 1;
             return mag;
         }
 

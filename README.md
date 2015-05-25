@@ -39,11 +39,13 @@ Hackday goals:
 
 
 Nice to have:
+- [ ] Refactor!!!
+- [ ] Wait for move before allowing next move (when using arrow keys)
 - [ ] Create overlay when hovering document cover to display some metadata
 - [ ] Add prefixing
-- [ ] Improove rotation (currently walls gets in the way)
+- [x] Improove rotation (currently walls gets in the way)
 - [ ] Don't allow walking through walls
 - [ ] Only render visible documents to screen
 - [ ] Create option to configure maze layout runtime (a map editor)
-- [ ] Improove wall generation algorithm (in some scenarios walls colide)
-- [ ] Add arms/gun/something like in a FPS (oh yeah!)
+- [x] Improove wall generation algorithm (in some scenarios walls colide)
+- [x] Add arms/gun/something like in a FPS (oh yeah!)
