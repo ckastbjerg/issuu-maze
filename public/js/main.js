@@ -269,7 +269,7 @@
         var $wallInner = $('<div class="maze__wall-inner js-wall-inner"></div>');
         $wall.css('transform', tempTranslate + tempTranslateZ + rotateY + scale);
 
-        var $img = $('<img class="maze__wall-image" src="' + doc.imageSrc + '" />');
+        var $img = $('<img class="maze__wall-image" src="' + doc.imageSrc + '" data-page-num="1" />');
         $img.on('load', function() {
             $(this).addClass('js-loaded');
         });
@@ -405,8 +405,8 @@
 
     function getNextImageSrc($img) {
         var imgSrc = $img.attr('src'),
-            currentPageNum = imgSrc.split('page_')[1].split('.')[0],
-            nextPageNum = parseInt(currentPageNum) + 1,
+            currentPageNum = parseInt($img.attr('data-page-num')),
+            nextPageNum = currentPageNum + 1,
             nextImgSrc = imgSrc.replace('page_' + currentPageNum, 'page_' + nextPageNum + quality);
 
         return nextImgSrc;
@@ -533,28 +533,44 @@
         preloadImage($(this).find('img:last-child'));
     });
 
+    var pageReadLimit = 5;
     $('body').on('click', '.js-document-cover', function(e) {
-        e.preventDefault();
-
-        readFadeIn($(this));
-
         var $wallInner = $(this).find('.js-wall-inner'),
             $img = $wallInner.find('img:last-child'),
-            nextImgSrc = getNextImageSrc($img);
+            nextPageNumber = parseInt($img.attr('data-page-num')) + 1;
 
-        $newImg = $('<img class="maze__wall-image" src="' + nextImgSrc + '">');
-        $wallInner.append($newImg);
+        if (nextPageNumber <= pageReadLimit) { // Only preview 5 pages, then refer to issuu.com
+            e.preventDefault();
 
-        $newImg.on('load', function() {
-            $newImg.addClass('js-loaded');
-            $newImg.addClass('js-animate-in');
-            $newImg.one(onAnimationEnd, function(e) {
-                preloadImage($newImg);
-                $newImg.removeClass('js-animate-in');
-                $newImg.addClass('js-current-page');
-                $img.remove();
+            var nextImgSrc = getNextImageSrc($img);
+
+            readFadeIn($(this));
+
+            $newImg = $('<img class="maze__wall-image" src="' + nextImgSrc + '" data-page-num="' + nextPageNumber + '" />');
+            $wallInner.append($newImg);
+
+            $newImg.on('load', function() {
+                $newImg.addClass('js-loaded');
+                $newImg.addClass('js-animate-in');
+                $newImg.one(onAnimationEnd, function(e) {
+                    preloadImage($newImg);
+                    $newImg.removeClass('js-animate-in');
+                    $newImg.addClass('js-current-page');
+                    $img.remove();
+                });
             });
-        });
+        } else if (nextPageNumber === pageReadLimit + 1) {
+            e.preventDefault();
+            var href = $(this).attr('href');
+            $(this).attr('href', href + '/' + (pageReadLimit + 1));
+            $referrer = $('<div class="maze__wall-image maze__wall-referrer"></div>');
+            $referrerInner = $('<div class="maze__wall-referrer-inner">Continue reading on issuu...</div>');
+            $referrer.append($referrerInner);
+            $wallInner.append($referrer);
+            $referrer.addClass('js-loaded');
+            $referrer.addClass('js-animate-in');
+        }
+
     });
 
     $('.js-search-btn').on('click', function(e) {

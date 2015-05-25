@@ -43,11 +43,11 @@ Nice to have:
 - [x] Improove wall generation algorithm (in some scenarios walls colide)
 - [x] Add arms/gun/something like in a FPS (oh yeah!)
 - [x] Make it possible to use a specific users documents for maze generation
+- [x] Limit amount of pages that can be read and the refer to issuu
 - [ ] Refactor!!!
 - [ ] Update url with search params to allow sharing of maze's
 - [ ] Make it possible to use stacks for maze generation (is this possible?)
 - [ ] Wait for move before allowing next move (when using arrow keys)
-- [ ] Limit amount of pages that can be read and the refer to issuu
 - [ ] Make it possible to slide left and right by holding shift + left/right
 - [ ] Create overlay when hovering document cover to display some metadata
 - [ ] Add prefixing

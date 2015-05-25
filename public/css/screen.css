@@ -359,6 +359,24 @@ img {
 	animation: page-slide 0.5s forwards;
 }
 
+.maze__wall-referrer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: table;
+	height: 100%;
+	width: 100%;
+	background: #f8f8f8;
+	text-align: center;
+	font-size: 32px;
+}
+
+.maze__wall-referrer-inner {
+	color: #7b95a5;
+	display: table-cell;
+	vertical-align: middle;
+
+}
 
 /* Debugger
    ========================================================================== */
