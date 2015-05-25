@@ -339,25 +339,31 @@
     }
 
     function move(keyCode, dir) {
+        var can = canMove();
+
         if (keyCode === 38) { // up
-            if (dir === 1) {
-                z += UNIT;
-            } else if (dir === 2) {
-                x -= UNIT;
-            } else if (dir === 3) {
-                z -= UNIT;
-            } else if (dir === 4) {
-                x += UNIT;
+            if (can.forwards) {
+                if (dir === 1) {
+                    z += UNIT;
+                } else if (dir === 2) {
+                    x -= UNIT;
+                } else if (dir === 3) {
+                    z -= UNIT;
+                } else if (dir === 4) {
+                    x += UNIT;
+                }
             }
         } else if (keyCode === 40) { // down
-            if (dir === 1) {
-                z -= UNIT;
-            } else if (dir === 2) {
-                x += UNIT;
-            } else if (dir === 3) {
-                z += UNIT;
-            } else if (dir === 4) {
-                x -= UNIT;
+            if (can.backwards) {
+                if (dir === 1) {
+                    z -= UNIT;
+                } else if (dir === 2) {
+                    x += UNIT;
+                } else if (dir === 3) {
+                    z += UNIT;
+                } else if (dir === 4) {
+                    x -= UNIT;
+                }
             }
         }
     }
@@ -415,6 +421,61 @@
     function readFadeOut() {
         $('.js-reading').removeClass('js-reading');
         $('.js-maze').removeClass('js-fade');
+    }
+
+    function canMove() {
+        var canMove = {
+            forwards: true,
+            backwards: true
+        };
+
+        if (featureToggles.walkThroughWalls) {
+            return canMove;
+        } else {
+            magz.forEach(function(mag, i) {
+                if (mag.used) {
+                    if (Math.abs(rotation) % 360 === 0 && (mag.rotateY === 0 || mag.rotateY === 180)) {
+                        if (Math.abs(x) === Math.abs(mag.translate)) {
+                            if (Math.abs(z + mag.translateZ) === 0) {
+                                canMove.forwards = false;
+                            }
+                            if (Math.abs(z - mag.translateZ) === 800) {
+                                canMove.backwards = false;
+                            }
+                        }
+                    } else if ((rotation % 360 === 90 || rotation % 360 === -270) && (mag.rotateY === 90 || mag.rotateY === -90)) {
+                        if (mag.translateZ + z === 400) {
+                            if (x + mag.translate === 400) {
+                                canMove.forwards = false;
+                            }
+                            if (x + mag.translate === -400) {
+                                canMove.backwards = false;
+                            }
+                        }
+                    } else if (Math.abs(rotation) % 360 === 180 && (mag.rotateY === 180 || mag.rotateY === 0)) {
+                        if (Math.abs(x) === Math.abs(mag.translate)) {
+                            if (z + mag.translateZ === 800) {
+                                canMove.forwards = false;
+                            }
+                            if (z + mag.translateZ === 0) {
+                                canMove.backwards = false;
+                            }
+                        }
+                    } else if ((rotation % 360 === 270 || rotation % 360 === -90) && (mag.rotateY === 90 || mag.rotateY === -90)) {
+                        if (mag.translateZ + z === 400) {
+                            if (x + mag.translate === -400) {
+                                canMove.forwards = false;
+                            }
+                            if (x + mag.translate === 400) {
+                                canMove.backwards = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            return canMove;
+        }
     }
 
     $('body').on('keydown', function(e) {

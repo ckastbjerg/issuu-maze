@@ -43,7 +43,7 @@ Nice to have:
 - [ ] Create overlay when hovering document cover to display some metadata
 - [ ] Add prefixing
 - [x] Improove rotation (currently walls gets in the way)
-- [ ] Don't allow walking through walls
+- [x] Don't allow walking through walls
 - [ ] Only render visible documents to screen
 - [ ] Create option to configure maze layout runtime (a map editor)
 - [ ] cue up clicks for reader to enhance experience...
